@@ -59,7 +59,7 @@ open class FaveButton: UIButton {
     @IBInspectable open var circleToColor: UIColor   = UIColor(red: 205/255, green: 143/255, blue: 246/255, alpha: 1)
     @IBInspectable open var selectedImage: UIImage?
 
-    @IBOutlet open weak var delegate: AnyObject?
+    open var delegate: FaveButtonDelegate?
     open var hitAreaPadding = 10.0
 
     fileprivate(set) var sparkGroupCount: Int = 7
@@ -114,6 +114,7 @@ open class FaveButton: UIButton {
         }
         guard animated == false else {
             self.isSelected = selected
+            delegate?.faveButton(self, willSelected: self.isSelected)
             return
         }
 
@@ -198,16 +199,11 @@ extension FaveButton{
     @objc func toggle(_ sender: FaveButton) {
         sender.isSelected = !sender.isSelected
 
-        guard case let delegate as FaveButtonDelegate = self.delegate else{
-            return
-        }
-
-        delegate.faveButton(sender, willSelected: sender.isSelected)
-
+        delegate?.faveButton(sender, willSelected: sender.isSelected)
 
         let delay = DispatchTime.now() + Double(Int64(Double(NSEC_PER_SEC) * Const.duration)) / Double(NSEC_PER_SEC)
         DispatchQueue.main.asyncAfter(deadline: delay) {
-            delegate.faveButton(sender, didSelected: sender.isSelected)
+            self.delegate?.faveButton(sender, didSelected: sender.isSelected)
         }
     }
 }
