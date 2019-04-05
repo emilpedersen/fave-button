@@ -32,6 +32,9 @@ class ViewController: UIViewController, FaveButtonDelegate{
         DotColors(first: color(0xF68FA7), second: color(0xF6A2B8))
     ]
     
+    func faveButton(_ faveButton: FaveButton, willSelected selected: Bool){
+    }
+
     func faveButton(_ faveButton: FaveButton, didSelected selected: Bool){
     }
     
